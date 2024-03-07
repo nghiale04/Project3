@@ -54,6 +54,7 @@
 
                     <div class="widget-body" style="display: none;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" >
                         <div class="widget-main">
+
                             <form:form id="listForm" modelAttribute="modelSearch" action="${buildingListUrl}" method="GET">
                                 <div class="row">
                                     <div class="form-group">
@@ -233,7 +234,7 @@
                                 <td>${item.name}</td>
                                 <td>${item.address}</td>
                                 <td>${item.numberOfBasement}</td>
-                                <td>${item.name}</td>
+                                <td>${item.managerName}</td>
                                 <td>${item.managerPhone}</td>
                                 <td>${item.floorArea}</td>
                                 <td>${item.emptyArea}</td>
@@ -288,7 +289,7 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-                <input type="hidden" id="buildingId" name="buildingId" value="1">
+                <input type="hidden" id="buildingId" name="buildingId" value="">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" id="bntassignmentBuilding">Giao tòa nhà</button>
@@ -303,19 +304,8 @@
     function assignmentBuilding(buildingId){
         $('#assignmentBuildingModal').modal();
         loadStaffs(buildingId);
-        $('#buildingId').val();
+        $('#buildingId').val(buildingId);
     }
-
-    $('#bntassignmentBuilding').click(function(e){
-        e.preventDefault();
-        var data= {};
-        data['buildingId'] = $('#buildingId').val();
-        var staffs = $('#staffList').find('tbody input[type = checkbox]:checked').map(function(){
-            return $(this).val();
-        }).get();
-        data['staffs'] = staffs;
-        console.log("OK");
-    });
 
     function loadStaffs(buildingId){
         $.ajax({
@@ -342,6 +332,36 @@
         });
     }
 
+    $('#bntassignmentBuilding').click(function(e){
+        e.preventDefault();
+        var data= {};
+        data['buildingId'] = $('#buildingId').val();
+        var staffs = $('#staffList').find('tbody input[type = checkbox]:checked').map(function(){
+            return $(this).val();
+        }).get();
+        data['staffs'] = staffs;
+        if(data['staffs'] != ''){
+            assignment(data);
+        }
+        console.log("OK");
+    });
+
+    function assignment(data){
+        $.ajax({
+            type: "POST",
+            url: "${buildingAPI}/" + 'assignment',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "JSON",
+            success: function (response) {
+                console.info("success");
+            },
+            error : function (respond) {
+                console.info("Giao không thành công!")
+                window.location.href = "<c:url value="/admin/building-list?message=erro"/>";
+            }
+        });
+    }
     $('#btnSearchBuilding').click(function (e){
        e.preventDefault();
        $('#listForm').submit();

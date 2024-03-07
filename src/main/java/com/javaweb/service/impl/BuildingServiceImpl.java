@@ -1,17 +1,23 @@
 package com.javaweb.service.impl;
 
+import com.javaweb.converter.BuildingDTOConverter;
 import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.UserEntity;
+import com.javaweb.model.request.BuildingSearchRequest;
+import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.ResponseDTO;
 import com.javaweb.model.response.StaffResponseDTO;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.UserRepository;
+import com.javaweb.repository.custom.impl.BuildingRepositoryCustomImpl;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +28,10 @@ public class BuildingServiceImpl implements IBuildingService {
     private BuildingRepository buildingRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BuildingRepositoryCustomImpl buildingRepositoryCustom;
+    @Autowired
+    private BuildingDTOConverter buildingDTOConverter;
     @Override
     public ResponseDTO listStaffs(Long buildingId) {
         BuildingEntity building = buildingRepository.findById(buildingId).get() ; // trả về một building id
@@ -50,4 +60,17 @@ public class BuildingServiceImpl implements IBuildingService {
         responseDTO.setMessage("success");
         return responseDTO;
     }
+
+    @Override
+    public List<BuildingSearchResponse> findAll(BuildingSearchRequest buildingSearchRequest) {
+        List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchRequest);
+        List<BuildingSearchResponse> result = new ArrayList<BuildingSearchResponse>();
+        for (BuildingEntity item : buildingEntities) {
+            BuildingSearchResponse building = buildingDTOConverter.toBuildingDTO(item);
+            result.add(building);
+        }
+        return result;
+    }
+
+
 }

@@ -84,6 +84,17 @@ public class BuildingEntity extends  BaseEntity{
     @Column(name = "type")
     private String type;
 
+    @Column(name = "managerphone")
+    private String managerPhone;
+
+    public String getManagerPhone() {
+        return managerPhone;
+    }
+
+    public void setManagerPhone(String managerPhone) {
+        this.managerPhone = managerPhone;
+    }
+
     public String getDistrict() {
         return district;
     }
