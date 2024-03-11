@@ -2,9 +2,7 @@ package com.javaweb.repository.custom.impl;
 
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.model.request.BuildingSearchRequest;
-import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,7 +13,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-@Primary
 public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;
@@ -94,4 +91,11 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
         return query.getResultList();
     }
+
+//    @Override
+//    public BuildingEntity addOrUpdateBuilding(BuildingDTO buildingDTO) {
+//        System.out.println("OK");
+//        return null;
+//    }
+
 }

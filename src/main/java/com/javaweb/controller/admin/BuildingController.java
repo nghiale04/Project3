@@ -11,6 +11,7 @@ import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,7 +30,10 @@ public class BuildingController {
     private IUserService userService;
     @Autowired
     private IBuildingService buildingService;
-
+    @Autowired
+    private BuildingRepository buildingRepository;
+    @Autowired
+    private ModelMapper modelMapper;
     @RequestMapping (value = "/admin/building-list", method = RequestMethod.GET)
     public ModelAndView buidlingList(@ModelAttribute BuildingSearchRequest buildingSearchRequest, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("admin/building/list");
@@ -39,6 +43,7 @@ public class BuildingController {
         mav.addObject("typeCodes", TypeCode.type());
         buildingService.findAll(buildingSearchRequest);
         List<BuildingSearchResponse> responseList = buildingService.findAll(buildingSearchRequest);
+//        BuildingSearchResponse addOrUpdate = buildingService.addOrUpdateBuilding();
         mav.addObject("buildingList",responseList);
         return mav;
     }
@@ -46,6 +51,7 @@ public class BuildingController {
     @RequestMapping (value = "/admin/building-edit", method = RequestMethod.GET)
     public ModelAndView buidlingEdit(@ModelAttribute("buildingEdit") BuildingDTO buildingDTO,HttpServletRequest request){
         ModelAndView mav = new ModelAndView("admin/building/edit");
+        mav.addObject("listForm", buildingDTO);
         mav.addObject("districts", District.type());
         mav.addObject("typeCodes", TypeCode.type());
         return mav;
@@ -54,32 +60,10 @@ public class BuildingController {
     @RequestMapping (value = "/admin/building-edit-{id}", method = RequestMethod.GET)
     public ModelAndView buidlingEdit(@PathVariable("id") Long Id, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("admin/building/edit");
-        BuildingDTO buildingDTO = new BuildingDTO();
-        buildingDTO.setName("ACM Building");
-        buildingDTO.setId(Id);
+        BuildingDTO buildingDTO = buildingService.findBuildingById(Id);
         mav.addObject("buildingEdit", buildingDTO);
         mav.addObject("districts", District.type());
         mav.addObject("typeCodes", TypeCode.type());
         return mav;
     }
 }
-//        List<BuildingSearchResponse> responseList = new ArrayList<>();
-//        BuildingSearchResponse item1 = new BuildingSearchResponse();
-//        item1.setId(3L);
-//        item1.setName("ACM Building");
-//        item1.setAddress("130 Quang Trung, Pham Ngũ Lão, Quận 1");
-//        item1.setNumberOfBasement(2L);
-//        item1.setManagerName("Anh Long");
-//        item1.setManagerPhone("0900000001");
-//        item1.setRentArea("200,300");
-//        BuildingSearchResponse item2 = new BuildingSearchResponse();
-//        item2.setId(4L);
-//        item2.setName("Building MA");
-//        item2.setAddress("Nguyễn Huệ, Tân Mai, Quận 3");
-//        item2.setNumberOfBasement(3L);
-//        item2.setManagerName("Anh Hải");
-//        item2.setManagerPhone("0900000002");
-//        item2.setRentArea("200,300,500");
-//        responseList.add(item1);
-//        responseList.add(item2);
-//        mav.addObject("buildingList",responseList);

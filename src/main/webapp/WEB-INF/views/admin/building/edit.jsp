@@ -101,7 +101,7 @@
                                 <div class="form-group">
                                     <div class="col-xs-3">Diện tích thuê</div>
                                     <div class="col-xs-9">
-                                        <form:input path="area" class="form-control"/>
+                                        <form:input path="rentArea" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="form-group">

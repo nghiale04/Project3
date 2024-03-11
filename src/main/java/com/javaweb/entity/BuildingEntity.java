@@ -62,7 +62,7 @@ public class BuildingEntity extends  BaseEntity{
     private String direction;
 
     @Column(name = "level")
-    private String level;
+    private Long level;
 
     @Column(name = "numberofbasement")
     private Long numberOfBasement;
@@ -87,6 +87,65 @@ public class BuildingEntity extends  BaseEntity{
     @Column(name = "managerphone")
     private String managerPhone;
 
+    @Column(name = "structure")
+    private String structure;
+
+    @Column(name = "rentpricedescription")
+    private String rentpricedescription;
+
+    @Column(name = "carfee")
+    private Long carfee;
+
+    @Column(name = "motofee")
+    private Long motofee;
+
+    @Column(name = "overtimefee")
+    private Long overtimefee;
+
+    @Column(name = "waterfee")
+    private Long waterfee;
+
+    @Column(name = "electricityfee")
+    private Long electricityfee;
+
+    @Column(name = "deposit")
+    private Long deposit;
+
+    @Column(name = "payment")
+    private Long payment;
+
+    @Column(name = "renttime")
+    private Long renttime;
+
+    @Column(name = "decorationtime")
+    private String decorationtime;
+
+    public String getStructure() {
+        return structure;
+    }
+
+    public void setStructure(String structure) {
+        this.structure = structure;
+    }
+
+    public String getRentpricedescription() {
+        return rentpricedescription;
+    }
+
+    public void setRentpricedescription(String rentpricedescription) {
+        this.rentpricedescription = rentpricedescription;
+    }
+
+
+
+    public String getDecorationtime() {
+        return decorationtime;
+    }
+
+    public void setDecorationtime(String decorationtime) {
+        this.decorationtime = decorationtime;
+    }
+
     public String getManagerPhone() {
         return managerPhone;
     }
@@ -109,6 +168,78 @@ public class BuildingEntity extends  BaseEntity{
 
     public void setBrokeragetee(String brokeragetee) {
         this.brokeragetee = brokeragetee;
+    }
+
+    public Long getLevel() {
+        return level;
+    }
+
+    public void setLevel(Long level) {
+        this.level = level;
+    }
+
+    public Long getCarfee() {
+        return carfee;
+    }
+
+    public void setCarfee(Long carfee) {
+        this.carfee = carfee;
+    }
+
+    public Long getMotofee() {
+        return motofee;
+    }
+
+    public void setMotofee(Long motofee) {
+        this.motofee = motofee;
+    }
+
+    public Long getOvertimefee() {
+        return overtimefee;
+    }
+
+    public void setOvertimefee(Long overtimefee) {
+        this.overtimefee = overtimefee;
+    }
+
+    public Long getWaterfee() {
+        return waterfee;
+    }
+
+    public void setWaterfee(Long waterfee) {
+        this.waterfee = waterfee;
+    }
+
+    public Long getElectricityfee() {
+        return electricityfee;
+    }
+
+    public void setElectricityfee(Long electricityfee) {
+        this.electricityfee = electricityfee;
+    }
+
+    public Long getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(Long deposit) {
+        this.deposit = deposit;
+    }
+
+    public Long getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Long payment) {
+        this.payment = payment;
+    }
+
+    public Long getRenttime() {
+        return renttime;
+    }
+
+    public void setRenttime(Long renttime) {
+        this.renttime = renttime;
     }
 
     public String getType() {
@@ -150,12 +281,7 @@ public class BuildingEntity extends  BaseEntity{
     public void setDirection(String direction) {
         this.direction = direction;
     }
-    public String getLevel() {
-        return level;
-    }
-    public void setLevel(String level) {
-        this.level = level;
-    }
+
     public Long getNumberOfBasement() {
         return numberOfBasement;
     }

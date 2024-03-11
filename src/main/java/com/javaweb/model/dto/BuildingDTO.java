@@ -17,12 +17,13 @@ public class BuildingDTO extends AbstractDTO{
     private Long serviceFee;
     private String direction;
     private Long level;
-    private Long area;
-    private Long rentPrice;
+    private String rentArea;
+    private String rentPrice;
     private String managerName;
     private String managerPhone;
     private List<String> typeCode;
     private Long motorbikefee;
+    private Long carfee;
     private Long overtimefee;
     private Long electricityfee;
     private Long deposit;
@@ -32,20 +33,29 @@ public class BuildingDTO extends AbstractDTO{
     private Long brokeragefee;
     private String note;
 
-    public Long getArea() {
-        return area;
+
+    public String getRentArea() {
+        return rentArea;
     }
 
-    public void setArea(Long area) {
-        this.area = area;
+    public void setRentArea(String rentArea) {
+        this.rentArea = rentArea;
     }
 
-    public Long getRentPrice() {
+    public String getRentPrice() {
         return rentPrice;
     }
 
-    public void setRentPrice(Long rentPrice) {
+    public void setRentPrice(String rentPrice) {
         this.rentPrice = rentPrice;
+    }
+
+    public Long getCarfee() {
+        return carfee;
+    }
+
+    public void setCarfee(Long carfee) {
+        this.carfee = carfee;
     }
 
     @Override
