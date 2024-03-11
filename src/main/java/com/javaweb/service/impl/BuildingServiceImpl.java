@@ -127,6 +127,8 @@ public class BuildingServiceImpl implements IBuildingService {
         for(Long it : ids){
             List<RentAreaEntity> delete = rentAreaRepository.findAllByBuildingEntityId(it);
             rentAreaRepository.deleteAll(delete);
+            List<AssignmentBuildingEntity> assignmentBuildingEntities = assignmentBuildingRepository.findAllByBuildingId(it);
+            assignmentBuildingRepository.deleteAll(assignmentBuildingEntities);
             buildingRepository.deleteById(it);
         }
     }
