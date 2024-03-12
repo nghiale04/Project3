@@ -1,6 +1,7 @@
 package com.javaweb.service.impl;
 
 import com.javaweb.converter.BuildingDTOConverter;
+import com.javaweb.converter.BuildingResponseConverter;
 import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.entity.RentAreaEntity;
@@ -44,6 +45,8 @@ public class BuildingServiceImpl implements IBuildingService {
     private RentAreaRepository rentAreaRepository;
     @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
+    @Autowired
+    private BuildingResponseConverter buildingResponseConverter;
     @Override
     public ResponseDTO listStaffs(Long buildingId) {
         BuildingEntity building = buildingRepository.findById(buildingId).get() ; // trả về một building id
@@ -85,17 +88,7 @@ public class BuildingServiceImpl implements IBuildingService {
 
     @Override
     public BuildingDTO findBuildingById(Long id) {
-        BuildingEntity buildingEntity =  buildingRepository.findById(id).get();
-        BuildingDTO buildingDTO = modelMapper.map(buildingEntity, BuildingDTO.class);
-        List<RentAreaEntity> rentAreaEntities = buildingEntity.getRentArea();
-        String[] values = buildingEntity.getType().split(",");
-        String rentType = rentAreaEntities.stream().map(it -> it.getValue().toString()).collect(Collectors.joining(", "));
-        List<String> typeCode = new ArrayList<>();
-        for(String it : values){
-            typeCode.add(it);
-        }
-        buildingDTO.setTypeCode(typeCode);
-        buildingDTO.setRentArea(rentType);
+        BuildingDTO buildingDTO = buildingResponseConverter.converterById(id);
         return buildingDTO;
     }
 

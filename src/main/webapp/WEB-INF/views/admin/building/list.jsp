@@ -38,21 +38,21 @@
                         </small>
                     </h1>
                 </div><!-- /.page-header -->
-                <div class="widget-box ui-sortable-handle collapsed">
+                <div class="widget-box ui-sortable-handle">
                     <div class="widget-header">
                         <h5 class="widget-title">Tìm kiếm</h5>
 
                         <div class="widget-toolbar">
 
                             <a href="#" data-action="collapse">
-                                <i class="ace-icon fa fa-chevron-down"></i>
+                                <i class="ace-icon fa fa-chevron-up"></i>
                             </a>
 
 
                         </div>
                     </div>
 
-                    <div class="widget-body" style="display: none;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" >
+                    <div class="widget-body" style="display: block;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" >
                         <div class="widget-main">
 
                             <form:form id="listForm" modelAttribute="modelSearch" action="${buildingListUrl}" method="GET">
@@ -355,6 +355,7 @@
             dataType: "JSON",
             success: function (response) {
                 console.info("success");
+                window.location.href="<c:url value='/admin/building-list?message=success'/>";
             },
             error : function (respond) {
                 console.info("Giao không thành công!")
@@ -391,6 +392,7 @@
             dataType: "JSON",
             success: function (result) {
                 $("#h11").html("SUCCESS");
+                window.location.href="<c:url value='/admin/building-list?message = success'/>";
             },
             error : function (respond) {
                 console.log("fail");

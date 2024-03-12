@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 public enum TypeCode {
     TANG_TRET("Tầng Trệt"),
-    NGUYEN_CAN("Nguên Căn"),
+    NGUYEN_CAN("Nguyên Căn"),
     NOI_THAT("Nội Thất");
 
     private final String name;

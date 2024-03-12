@@ -185,7 +185,7 @@
                                 <div class="form-group">
                                     <div class="col-xs-3">Loại tòa nhà</div>
                                     <div class="col-xs-9">
-                                        <form:checkboxes items="${typeCodes}" path="typeCode"/>
+                                        <form:checkboxes id="typeCode" items="${typeCodes}" path="typeCode"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -231,14 +231,32 @@
             }
         });
         data['typeCode'] = typeCode;
+        if(typeCode != ''){
+            addOrupdate(data);
+            window.location.href = "<c:url value="/admin/building-list?message=success"/>";
+        }
+        else{
+            window.location.href = "<c:url value="/admin/building-edit?typeCode=require"/>";
+        }
+
+    });
+    function addOrupdate(data){
         $.ajax({
             type: "POST",
             url: "${buildingAPI}",
             data: JSON.stringify(data),
             contentType: "application/json",
             dataType: "JSON",
+            success: function (response) {
+                console.info("success!");
+
+            },
+            error : function (respond) {
+                console.info("Fail!")
+                console.log(respond);
+            }
         });
-    });
+    }
 
     $('#bntCancel').click(function (){
        window.location.href="/admin/building-list";
