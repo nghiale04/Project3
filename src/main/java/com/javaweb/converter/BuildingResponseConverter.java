@@ -26,7 +26,7 @@ public class BuildingResponseConverter {
         BuildingDTO buildingDTO = modelMapper.map(buildingEntity, BuildingDTO.class);
         List<RentAreaEntity> rentAreaEntities = buildingEntity.getRentArea();
         String[] values = buildingEntity.getType().split(",");
-        String rentType = rentAreaEntities.stream().map(it -> it.getValue().toString()).collect(Collectors.joining(", "));
+        String rentType = rentAreaEntities.stream().map(it -> it.getValue().toString()).collect(Collectors.joining(","));
         List<String> typeCode = new ArrayList<>();
         for(String it : values){
             typeCode.add(it);

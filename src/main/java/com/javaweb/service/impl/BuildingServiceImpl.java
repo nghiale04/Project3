@@ -97,7 +97,7 @@ public class BuildingServiceImpl implements IBuildingService {
             BuildingEntity building = new BuildingEntity();
                 building = modelMapper.map(buildingDTO,BuildingEntity.class);
                 List<String> typeCode = buildingDTO.getTypeCode();
-                String typeCodeFinal = typeCode.stream().map(it -> it.toString()).collect(Collectors.joining(", "));
+                String typeCodeFinal = typeCode.stream().map(it -> it.toString()).collect(Collectors.joining(","));
                 building.setType(typeCodeFinal);
                 buildingRepository.save(building);
 
@@ -128,6 +128,8 @@ public class BuildingServiceImpl implements IBuildingService {
 
     @Override
     public void assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
+        List<AssignmentBuildingEntity> assignmentBuildingEntities = assignmentBuildingRepository.findAllByBuildingId(assignmentBuildingDTO.getBuildingId());
+        assignmentBuildingRepository.deleteAll(assignmentBuildingEntities);
     BuildingEntity building = buildingRepository.findById(assignmentBuildingDTO.getBuildingId()).get();
     List<UserEntity> user = userRepository.findByIdIn(assignmentBuildingDTO.getStaffs());
     for(UserEntity it: user){

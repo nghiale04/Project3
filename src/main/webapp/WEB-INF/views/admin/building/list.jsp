@@ -359,7 +359,7 @@
             },
             error : function (respond) {
                 console.info("Giao không thành công!")
-                window.location.href = "<c:url value="/admin/building-list?message=erro"/>";
+                window.location.href = "<c:url value="/admin/building-list?message=success"/>";
             }
         });
     }
@@ -390,12 +390,12 @@
             data: JSON.stringify(data),
             contentType: "application/json",
             dataType: "JSON",
-            success: function (result) {
-                $("#h11").html("SUCCESS");
-                window.location.href="<c:url value='/admin/building-list?message = success'/>";
+            success: function (respond) {
+              console.log("Success");
             },
             error : function (respond) {
                 console.log("fail");
+                window.location.href = "<c:url value="/admin/building-list?message=success"/> ";
             }
         });
     }
