@@ -1,6 +1,7 @@
 package com.javaweb.service.impl;
 
 import com.javaweb.converter.BuildingDTOConverter;
+import com.javaweb.converter.BuildingEntityConverter;
 import com.javaweb.converter.BuildingResponseConverter;
 import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
@@ -47,6 +48,8 @@ public class BuildingServiceImpl implements IBuildingService {
     private AssignmentBuildingRepository assignmentBuildingRepository;
     @Autowired
     private BuildingResponseConverter buildingResponseConverter;
+    @Autowired
+    private BuildingEntityConverter buildingEntityConverter;
     @Override
     public ResponseDTO listStaffs(Long buildingId) {
         BuildingEntity building = buildingRepository.findById(buildingId).get() ; // trả về một building id
@@ -94,25 +97,7 @@ public class BuildingServiceImpl implements IBuildingService {
 
     @Override
     public void addOrUpdateBuilding(BuildingDTO buildingDTO) {
-            BuildingEntity building = new BuildingEntity();
-                building = modelMapper.map(buildingDTO,BuildingEntity.class);
-                List<String> typeCode = buildingDTO.getTypeCode();
-                String typeCodeFinal = typeCode.stream().map(it -> it.toString()).collect(Collectors.joining(","));
-                building.setType(typeCodeFinal);
-                buildingRepository.save(building);
-
-                String rentArea =buildingDTO.getRentArea();
-                String[] values = rentArea.split(",");
-                List<RentAreaEntity> rentAreaEntities =new ArrayList<>();
-                for (String it : values){
-                    RentAreaEntity rentAreaEntity = new RentAreaEntity();
-                    rentAreaEntity.setValue(Integer.parseInt(it));
-                    rentAreaEntity.setBuilding(building);
-                    rentAreaEntities.add(rentAreaEntity);
-                }
-                List<RentAreaEntity> delete = rentAreaRepository.findAllByBuildingEntityId(building.getId());
-                rentAreaRepository.deleteAll(delete);
-                rentAreaRepository.saveAll(rentAreaEntities);
+          buildingEntityConverter.toBuildingEntityConverter(buildingDTO);
     }
 
     @Override
