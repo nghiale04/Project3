@@ -115,9 +115,9 @@ public class BuildingServiceImpl implements IBuildingService {
     public void assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO) {
         List<AssignmentBuildingEntity> assignmentBuildingEntities = assignmentBuildingRepository.findAllByBuildingId(assignmentBuildingDTO.getBuildingId());
         assignmentBuildingRepository.deleteAll(assignmentBuildingEntities);
-    BuildingEntity building = buildingRepository.findById(assignmentBuildingDTO.getBuildingId()).get();
-    List<UserEntity> user = userRepository.findByIdIn(assignmentBuildingDTO.getStaffs());
-    for(UserEntity it: user){
+        BuildingEntity building = buildingRepository.findById(assignmentBuildingDTO.getBuildingId()).get();
+        List<UserEntity> user = userRepository.findByIdIn(assignmentBuildingDTO.getStaffs());
+        for(UserEntity it: user){
         AssignmentBuildingEntity assignmentBuilding = new AssignmentBuildingEntity();
         assignmentBuilding.setBuilding(building);
         assignmentBuilding.setUser(it);
