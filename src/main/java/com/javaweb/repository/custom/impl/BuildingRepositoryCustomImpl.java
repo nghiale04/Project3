@@ -3,6 +3,7 @@ package com.javaweb.repository.custom.impl;
 import com.javaweb.entity.BuildingEntity;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -81,7 +82,7 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
     }
 
     @Override
-    public List<BuildingEntity> findAll(BuildingSearchRequest buildingSearchRequest) {
+    public List<BuildingEntity> findAll(BuildingSearchRequest buildingSearchRequest, Pageable pageable) {
         StringBuilder sql = new StringBuilder("Select b.* from building b ");
         StringBuilder where = new StringBuilder(" WHERE 1=1 ");
         nomalQuery(buildingSearchRequest, where);
@@ -90,6 +91,17 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
         sql.append(where);
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
         return query.getResultList();
+    }
+
+    @Override
+    public int countTotalItem() {
+        String sql = buildQueryFilter();
+        Query query = entityManager.createNativeQuery(sql.toString());
+        return query.getResultList().size();
+    }
+    private String buildQueryFilter() {
+        String sql = "SELECT * FROM building";
+        return sql;
     }
 
 //    @Override

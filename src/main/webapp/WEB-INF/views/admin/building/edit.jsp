@@ -195,6 +195,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-3 no-padding-right">Hình đại diện</label>
+                                    <input class="col-sm-3 no-padding-right" type="file" id="uploadImage"/>
+                                    <div class="col-sm-9">
+                                        <c:if test="${not empty buildingEdit.image}">
+                                            <c:set var="imagePath" value="/repository${buildingEdit.image}"/>
+                                            <img src="${imagePath}" id="viewImage" width="300px" height="300px" style="margin-top: 50px">
+                                        </c:if>
+                                        <c:if test="${empty buildingEdit.image}">
+                                            <img src="/admin/image/defaul.jpg" id="viewImage" width="300px" height="300px">
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-xs-3"></label>
                                     <div class="col-xs-9">
                                         <c:if test="${not empty buildingEdit.id}">
@@ -208,6 +221,7 @@
                                     </div>
 
                                 </div>
+
                                 <form:hidden path="id" id="buildingId"/>
                             </form>
 
@@ -218,6 +232,8 @@
     </div><!-- /.main-content -->
 </div><!-- /.main-container -->
 <script>
+    var imageBase64 = '';
+    var imageName = '';
     $('#bntAddOrUpdateBuilding').click(function(){
         var data = {};
         var typeCode =[];
@@ -230,7 +246,19 @@
                 typeCode.push(v.value);
             }
         });
+        $.each(formData, function (i, e) {
+            if ('' !== e.value && null != e.value) {
+                data['' + e.name + ''] = e.value;
+            }
+
+            if ('' !== imageBase64) {
+                data['imageBase64'] = imageBase64;
+                data['imageName'] = imageName;
+            }
+        });
+        var buildingId = data['id'];
         data['typeCode'] = typeCode;
+
         if(typeCode != ''){
             addOrupdate(data);
             window.location.href = "<c:url value="/admin/building-list?message=success"/>";
@@ -238,6 +266,24 @@
         else{
             window.location.href = "<c:url value="/admin/building-edit?typeCode=require"/>";
         }
+        $('#loading_image').show();
+
+        <%--$.ajax({--%>
+        <%--    type: "POST",--%>
+        <%--    url: "${buildingAPI}",--%>
+        <%--    data: JSON.stringify(data),--%>
+        <%--    dataType: "json",--%>
+        <%--    contentType: "application/json",--%>
+        <%--    success: function (res) {--%>
+        <%--        $('#loading_image').hide();--%>
+        <%--        showMessageConfirmation("Thành công", "Thao tác thành công!", "success", "/admin/building-edit-" + res.id);--%>
+        <%--    },--%>
+        <%--    error: function () {--%>
+        <%--        $('#loading_image').hide();--%>
+        <%--        var redirectUrl = (null === buildingId) ? "" : "/admin/building-edit-" + {buildingId};--%>
+        <%--        showMessageConfirmation("Thất bại", "Đã có lỗi xảy ra! Vui lòng kiểm tra lại.", "warning", redirectUrl);--%>
+        <%--    }--%>
+        <%--});--%>
 
     });
     function addOrupdate(data){
@@ -261,6 +307,27 @@
     $('#bntCancel').click(function (){
        window.location.href="/admin/building-list";
     });
+
+    $('#uploadImage').change(function (event) {
+        var reader = new FileReader();
+        var file = $(this)[0].files[0];
+        reader.onload = function(e){
+            imageBase64 = e.target.result;
+            imageName = file.name; // ten hinh khong dau, khoang cach. vd: a-b-c
+        };
+        reader.readAsDataURL(file);
+        openImage(this, "viewImage");
+    });
+
+    function openImage(input, imageView) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#' +imageView).attr('src', reader.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 </body>
 </html>

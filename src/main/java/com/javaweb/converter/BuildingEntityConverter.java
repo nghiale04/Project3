@@ -5,10 +5,16 @@ import com.javaweb.entity.RentAreaEntity;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RentAreaRepository;
+import com.javaweb.utils.UploadFileUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,15 +28,21 @@ public class BuildingEntityConverter {
     private BuildingRepository buildingRepository;
     @Autowired
     private RentAreaRepository rentAreaRepository;
+    private final UploadFileUtils uploadFileUtils;
+    @Autowired
+    public BuildingEntityConverter(UploadFileUtils uploadFileUtils) {
+        this.uploadFileUtils = uploadFileUtils;
+    }
     public void toBuildingEntityConverter(BuildingDTO buildingDTO){
         BuildingEntity building = new BuildingEntity();
         building = modelMapper.map(buildingDTO,BuildingEntity.class);
         List<String> typeCode = buildingDTO.getTypeCode();
         String typeCodeFinal = typeCode.stream().map(it -> it.toString()).collect(Collectors.joining(","));
         building.setType(typeCodeFinal);
+        saveThumbnail(buildingDTO,building);
         buildingRepository.save(building);
 
-        String rentArea =buildingDTO.getRentArea();
+        String rentArea = buildingDTO.getRentArea();
         String[] values = rentArea.split(",");
         List<RentAreaEntity> rentAreaEntities =new ArrayList<>();
         for (String it : values){
@@ -39,8 +51,22 @@ public class BuildingEntityConverter {
             rentAreaEntity.setBuilding(building);
             rentAreaEntities.add(rentAreaEntity);
         }
-        List<RentAreaEntity> delete = rentAreaRepository.findAllByBuildingEntityId(building.getId());
+        List<RentAreaEntity> delete = building.getRentArea();
         rentAreaRepository.deleteAll(delete);
         rentAreaRepository.saveAll(rentAreaEntities);
+    }
+    private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+        String path = "/building/" + buildingDTO.getImageName();
+        if (null != buildingDTO.getImageBase64()) {
+            if (null != buildingEntity.getImage()) {
+                if (!path.equals(buildingEntity.getImage())) {
+                    File file = new File("C://home/office" + buildingEntity.getImage());
+                    file.delete();
+                }
+            }
+            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+            uploadFileUtils.writeOrUpdate(path, bytes);
+            buildingEntity.setImage(path);
+        }
     }
 }

@@ -20,13 +20,17 @@ import com.javaweb.repository.UserRepository;
 import com.javaweb.repository.custom.impl.BuildingRepositoryCustomImpl;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
+import com.javaweb.utils.UploadFileUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -41,8 +45,6 @@ public class BuildingServiceImpl implements IBuildingService {
     @Autowired
     private BuildingDTOConverter buildingDTOConverter;
     @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
     private RentAreaRepository rentAreaRepository;
     @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
@@ -50,16 +52,13 @@ public class BuildingServiceImpl implements IBuildingService {
     private BuildingResponseConverter buildingResponseConverter;
     @Autowired
     private BuildingEntityConverter buildingEntityConverter;
+
+
     @Override
     public ResponseDTO listStaffs(Long buildingId) {
         BuildingEntity building = buildingRepository.findById(buildingId).get() ; // trả về một building id
         List<UserEntity> staffs = userRepository.findByStatusAndRoles_Code(1,"STAFF"); // trả về những staff đã được cấp quyền
-        List<AssignmentBuildingEntity> temp = building.getAssignmentBuildingEntities();
-        List<UserEntity> staffAssignment = new ArrayList<>();
-        for (AssignmentBuildingEntity item : temp){
-            UserEntity it = userRepository.getOne(item.getUser().getId());
-            staffAssignment.add(it);
-        }
+        List<UserEntity> staffAssignment = building.getUserEntities();
         List<StaffResponseDTO> staffResponseDTOS = new ArrayList<>();
         ResponseDTO responseDTO = new ResponseDTO();
         for (UserEntity it :staffs){
@@ -79,8 +78,8 @@ public class BuildingServiceImpl implements IBuildingService {
     }
 
     @Override
-    public List<BuildingSearchResponse> findAll(BuildingSearchRequest buildingSearchRequest) {
-        List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchRequest);
+    public List<BuildingSearchResponse> findAll(BuildingSearchRequest buildingSearchRequest, Pageable pageable) {
+        List<BuildingEntity> buildingEntities = buildingRepository.findAll(buildingSearchRequest, pageable);
         List<BuildingSearchResponse> result = new ArrayList<BuildingSearchResponse>();
         for (BuildingEntity item : buildingEntities) {
             BuildingSearchResponse building = buildingDTOConverter.toBuildingDTO(item);
@@ -103,7 +102,8 @@ public class BuildingServiceImpl implements IBuildingService {
     @Override
     public void deleteBuildingById(List<Long> ids) {
         for(Long it : ids){
-            List<RentAreaEntity> delete = rentAreaRepository.findAllByBuildingEntityId(it);
+            BuildingEntity building = buildingRepository.findById(it).get();
+            List<RentAreaEntity> delete = building.getRentArea();
             rentAreaRepository.deleteAll(delete);
             List<AssignmentBuildingEntity> assignmentBuildingEntities = assignmentBuildingRepository.findAllByBuildingId(it);
             assignmentBuildingRepository.deleteAll(assignmentBuildingEntities);
@@ -124,4 +124,11 @@ public class BuildingServiceImpl implements IBuildingService {
         assignmentBuildingRepository.save(assignmentBuilding);
     }
     }
+
+    @Override
+    public int countTotalItem() {
+        return buildingRepository.countTotalItem();
+    }
+
+
 }

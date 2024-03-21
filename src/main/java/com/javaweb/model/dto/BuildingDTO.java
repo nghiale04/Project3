@@ -32,6 +32,38 @@ public class BuildingDTO extends AbstractDTO{
     private String decorationtime;
     private Long brokeragefee;
     private String note;
+    private String image;
+
+    private String imageBase64;
+
+    private String imageName;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageBase64() {
+        if (imageBase64 != null) {
+            return imageBase64.split(",")[1];
+        }
+        return null;
+    }
 
 
     public String getRentArea() {

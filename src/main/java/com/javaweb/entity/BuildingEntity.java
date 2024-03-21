@@ -24,7 +24,7 @@ public class BuildingEntity extends  BaseEntity{
     @Column(name = "district")
     private String district;
 
-    @OneToMany(mappedBy = "buildingEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "buildingEntity", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST},orphanRemoval = true)
     private List<RentAreaEntity> rentArea = new ArrayList<>();
 
     public List<RentAreaEntity> getRentArea() {
@@ -34,29 +34,29 @@ public class BuildingEntity extends  BaseEntity{
         this.rentArea = rentArea;
     }
 
-    @OneToMany(mappedBy =  "building", fetch = FetchType.LAZY)
-    private List<AssignmentBuildingEntity>  assignmentBuildingEntities = new ArrayList<>();
-
-    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
-        return assignmentBuildingEntities;
-    }
-
-    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
-        this.assignmentBuildingEntities = assignmentBuildingEntities;
-    }
-
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name= "assignmentbuilding",
-//        joinColumns = @JoinColumn(name = "buildingid",nullable = false),
-//        inverseJoinColumns = @JoinColumn(name = "staffid",nullable = false))
-//    private List<UserEntity> userEntities = new ArrayList<>();
+//    @OneToMany(mappedBy =  "building", fetch = FetchType.LAZY)
+//    private List<AssignmentBuildingEntity>  assignmentBuildingEntities = new ArrayList<>();
 //
-//    public List<UserEntity> getUserEntities() {
-//        return userEntities;
+//    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
+//        return assignmentBuildingEntities;
 //    }
-//    public void setUserEntities(List<UserEntity> userEntities) {
-//        this.userEntities = userEntities;
+//
+//    public void setAssignmentBuildingEntities(List<AssignmentBuildingEntity> assignmentBuildingEntities) {
+//        this.assignmentBuildingEntities = assignmentBuildingEntities;
 //    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name= "assignmentbuilding",
+        joinColumns = @JoinColumn(name = "buildingid",nullable = false),
+        inverseJoinColumns = @JoinColumn(name = "staffid",nullable = false))
+    private List<UserEntity> userEntities = new ArrayList<>();
+
+    public List<UserEntity> getUserEntities() {
+        return userEntities;
+    }
+    public void setUserEntities(List<UserEntity> userEntities) {
+        this.userEntities = userEntities;
+    }
 
     @Column(name = "direction")
     private String direction;
@@ -119,6 +119,17 @@ public class BuildingEntity extends  BaseEntity{
 
     @Column(name = "decorationtime")
     private String decorationtime;
+
+    @Column(name="avatar")
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getStructure() {
         return structure;
