@@ -40,7 +40,6 @@ public class BuildingEntityConverter {
         String typeCodeFinal = typeCode.stream().map(it -> it.toString()).collect(Collectors.joining(","));
         building.setType(typeCodeFinal);
         saveThumbnail(buildingDTO,building);
-        buildingRepository.save(building);
 
         String rentArea = buildingDTO.getRentArea();
         String[] values = rentArea.split(",");
@@ -51,9 +50,8 @@ public class BuildingEntityConverter {
             rentAreaEntity.setBuilding(building);
             rentAreaEntities.add(rentAreaEntity);
         }
-        List<RentAreaEntity> delete = building.getRentArea();
-        rentAreaRepository.deleteAll(delete);
-        rentAreaRepository.saveAll(rentAreaEntities);
+        building.setRentArea(rentAreaEntities);
+        buildingRepository.save(building);
     }
     private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
         String path = "/building/" + buildingDTO.getImageName();
