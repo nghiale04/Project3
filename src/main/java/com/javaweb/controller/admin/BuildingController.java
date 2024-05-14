@@ -10,6 +10,7 @@ import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.repository.BuildingRepository;
+import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
 import com.javaweb.utils.DisplayTagUtils;
@@ -34,22 +35,27 @@ public class BuildingController {
     private IUserService userService;
     @Autowired
     private IBuildingService buildingService;
-    @Autowired
-    private BuildingRepository buildingRepository;
-    @Autowired
-    private ModelMapper modelMapper;
     @RequestMapping (value = "/admin/building-list", method = RequestMethod.GET)
-    public ModelAndView buidlingList(@ModelAttribute (SystemConstant.MODEL) BuildingSearchRequest buildingSearchRequest, HttpServletRequest request){
+    public ModelAndView buidlingList(@ModelAttribute BuildingSearchRequest buildingSearchRequest, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("admin/building/list");
         mav.addObject("modelSearch", buildingSearchRequest);
         mav.addObject("listStaffs", userService.getStaffs());
         mav.addObject("districts", District.type());
         mav.addObject("typeCodes", TypeCode.type());
-        DisplayTagUtils.of(request,buildingSearchRequest);
-        List<BuildingSearchResponse> responseList = buildingService.findAll(buildingSearchRequest, PageRequest.of(buildingSearchRequest.getPage() - 1, buildingSearchRequest.getMaxPageItems()));
-        buildingSearchRequest.setListResult(responseList);
-        buildingSearchRequest.setTotalItems(buildingService.countTotalItem());
-        mav.addObject("buildingList",responseList);
+        if(SecurityUtils.getAuthorities().contains("ROLE_STAFF")){
+            Long staffId = SecurityUtils.getPrincipal().getId();
+            buildingSearchRequest.setStaffId(staffId);
+            mav.addObject("buildings",buildingService.findAll(buildingSearchRequest));
+        }
+        else{
+            mav.addObject("buildings",buildingService.findAll(buildingSearchRequest));
+        }
+        BuildingSearchResponse model = new BuildingSearchResponse();
+        DisplayTagUtils.of(request,model);
+        List<BuildingSearchResponse> responseList = buildingService.getAllBuilding(new PageRequest(model.getPage()-1, model.getMaxPageItems()));
+        model.setListResult(responseList);
+        model.setTotalItems(buildingService.findAll(buildingSearchRequest).size());
+        mav.addObject(SystemConstant.MODEL, model);
         return mav;
     }
 

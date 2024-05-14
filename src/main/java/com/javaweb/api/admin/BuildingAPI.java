@@ -43,5 +43,4 @@ public class BuildingAPI {
         buildingService.assignmentBuilding(assignmentBuildingDTO);
         System.out.println("OK");
     }
-    //version1
 }

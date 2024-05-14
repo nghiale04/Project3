@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
+<c:url var="customerAPI" value="/api/customer"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -116,21 +117,21 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <h2 class="title-lienhe"><strong>Liên hệ với chúng tôi</strong></h2>
-                    <form>
+                    <form:form  id="listForm" action="/api/customer" method="POST">
                         <div class="row">
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Họ và tên">
+                                <input type="text" class="form-control" placeholder="Họ và tên" name="fullname" id="fullname">
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Email">
+                                <input type="text" class="form-control" placeholder="Email" name="email" id="email">
                             </div>
                         </div>
-                        <input type="text" class="form-control mt-3" placeholder="Số điện thoại">
-                        <input type="text" class="form-control mt-3" placeholder="Nội dung">
-                        <button class="btn btn-primary px-4 mt-3">
+                        <input type="text" class="form-control mt-3" placeholder="Số điện thoại" name="phone" id="phone">
+                        <input type="text" class="form-control mt-3" placeholder="Nội dung" name="demand" id="demand">
+                        <button type="button" class="btn btn-primary px-4 mt-3" id="addCustomer">
                             Gửi liên hệ
                         </button>
-                    </form>
+                    </form:form>
                 </div>
             </div>
         </div>
@@ -235,5 +236,40 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" integrity="sha512-CwHUCK55pONjDxvPZQeuwKpxos8mPyEv9gGuWC8Vr0357J2uXg1PycGDPND9EgdokSFTG6kgSApoDj9OM22ksw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $('#addCustomer').click(function(e){
+        e.preventDefault();
+        var data = {};
+        data['fullname'] = $('#fullname').val();
+        data['email'] = $('#email').val();
+        data['phone'] = $('#phone').val();
+        data['demand'] = $('#demand').val();
+        if (data != ''){
+            window.alert("Thêm thành công!");
+            addCustomer(data);
+            location.reload();
+        }
+    });
+    function addCustomer(data){
+        $.ajax({
+            type: "POST",
+            url: '${customerAPI}',
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "JSON",
+            success: function (response) {
+                console.info("success!");
+
+            },
+            error : function (respond) {
+                console.info("Fail!")
+                console.log(respond);
+            }
+        });
+    }
+</script>
 </body>
 </html>
+
+

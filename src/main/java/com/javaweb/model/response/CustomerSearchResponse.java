@@ -1,19 +1,25 @@
-package com.javaweb.model.dto;
+package com.javaweb.model.response;
 
-public class CustomerDTO extends AbstractDTO{
+import com.javaweb.model.dto.AbstractDTO;
+
+import javax.persistence.Column;
+
+public class CustomerSearchResponse extends AbstractDTO {
+
+    private Long id;
     private String fullname;
     private String phone;
     private String email;
     private String demand;
     private String status;
-    private String companyname;
+    private Integer isactive;
 
-    public String getCompanyname() {
-        return companyname;
+    public Integer getIsactive() {
+        return isactive;
     }
 
-    public void setCompanyname(String companyname) {
-        this.companyname = companyname;
+    public void setIsactive(Integer isactive) {
+        this.isactive = isactive;
     }
 
     public String getDemand() {
@@ -38,6 +44,16 @@ public class CustomerDTO extends AbstractDTO{
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPhone() {

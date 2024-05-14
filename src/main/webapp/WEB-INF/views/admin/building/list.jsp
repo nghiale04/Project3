@@ -152,12 +152,15 @@
 
                                         </div>
                                         <div class="col-xs-2">
-                                            <label class="name">Nhân viên</label>
-                                            <form:select path="staffId" class="form-control">
-                                                <form:option value="">---Chọn nhân viên---</form:option>
-                                                <form:options items="${listStaffs}" />
-                                            </form:select>
+                                            <security:authorize access="hasRole('MANAGER')">
+                                                <label class="name">Nhân viên</label>
+                                                <form:select path="staffId" class="form-control">
+                                                    <form:option value="">---Chọn nhân viên---</form:option>
+                                                    <form:options items="${listStaffs}" />
+                                                </form:select>
+                                            </security:authorize>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -199,7 +202,7 @@
                 <!-- Danh sách kết quả -->
                 <div class="row" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top: 80px;">
                     <div class="col-xs-12">
-                        <display:table name="model.listResult" cellspacing="0" cellpadding="0"
+                        <display:table name="buildings" cellspacing="0" cellpadding="0"
                                        requestURI="${buildingListUrl}" partialList="true" sort="external"
                                        size="${model.totalItems}" defaultsort="2" defaultorder="ascending"
                                        id="tableList" pagesize="${model.maxPageItems}" export="false"
@@ -224,9 +227,11 @@
                             <display:column headerClass="text-middle" property="rentArea" title="Diện tích thuê"/>
                             <display:column headerClass="text-middle" property="brokerageFee" title="Phí môi giới"/>
                             <display:column title="Thao tác">
+                                <security:authorize access="hasRole('MANAGER')">
                                     <button class="btn btn-xs btn-success" title="Giao Tòa Nhà" onclick="assignmentBuilding(${tableList.id})">
                                         <i class="ace-icon glyphicon glyphicon-align-justify"></i>
                                     </button>
+                                </security:authorize>
 
                                     <a class="btn btn-xs btn-info" title="Sửa tòa nhà" href="/admin/building-edit-${tableList.id}">
                                         <i class="ace-icon fa fa-pencil bigger-120"></i>

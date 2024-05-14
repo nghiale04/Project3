@@ -3,7 +3,7 @@ package com.javaweb.model.response;
 
 import com.javaweb.model.dto.AbstractDTO;
 
-public class BuildingSearchResponse{
+public class BuildingSearchResponse extends AbstractDTO{
 	private Long id;
 	private String name;
 	private String address;

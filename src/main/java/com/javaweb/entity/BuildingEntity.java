@@ -24,7 +24,7 @@ public class BuildingEntity extends  BaseEntity{
     @Column(name = "district")
     private String district;
 
-    @OneToMany(mappedBy = "buildingEntity", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST},orphanRemoval = true)
+    @OneToMany(mappedBy = "buildingEntity", fetch = FetchType.LAZY, cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE},orphanRemoval = true)
     private List<RentAreaEntity> rentArea = new ArrayList<>();
 
     public List<RentAreaEntity> getRentArea() {
@@ -45,7 +45,7 @@ public class BuildingEntity extends  BaseEntity{
 //        this.assignmentBuildingEntities = assignmentBuildingEntities;
 //    }
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.MERGE})
     @JoinTable(name= "assignmentbuilding",
         joinColumns = @JoinColumn(name = "buildingid",nullable = false),
         inverseJoinColumns = @JoinColumn(name = "staffid",nullable = false))
@@ -78,8 +78,8 @@ public class BuildingEntity extends  BaseEntity{
     @Column(name = "servicefee")
     private String serviceFee;
 
-    @Column(name = "brokeragetee")
-    private String brokeragetee;
+    @Column(name = "brokeragefee")
+    private String brokeragefee;
 
     @Column(name = "type")
     private String type;
@@ -173,12 +173,12 @@ public class BuildingEntity extends  BaseEntity{
         this.district = district;
     }
 
-    public String getBrokeragetee() {
-        return brokeragetee;
+    public String getBrokeragefee() {
+        return brokeragefee;
     }
 
-    public void setBrokeragetee(String brokeragetee) {
-        this.brokeragetee = brokeragetee;
+    public void setBrokeragefee(String brokeragefee) {
+        this.brokeragefee = brokeragefee;
     }
 
     public Long getLevel() {

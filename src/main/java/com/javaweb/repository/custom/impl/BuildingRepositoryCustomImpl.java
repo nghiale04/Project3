@@ -1,6 +1,7 @@
 package com.javaweb.repository.custom.impl;
 
 import com.javaweb.entity.BuildingEntity;
+import com.javaweb.entity.UserEntity;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,7 +84,7 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
     }
 
     @Override
-    public List<BuildingEntity> findAll(BuildingSearchRequest buildingSearchRequest, Pageable pageable) {
+    public List<BuildingEntity> findAll(BuildingSearchRequest buildingSearchRequest) {
         StringBuilder sql = new StringBuilder("Select b.* from building b ");
         StringBuilder where = new StringBuilder(" WHERE 1=1 ");
         nomalQuery(buildingSearchRequest, where);
@@ -94,20 +96,18 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
     }
 
     @Override
-    public int countTotalItem() {
-        String sql = buildQueryFilter();
-        Query query = entityManager.createNativeQuery(sql.toString());
-        return query.getResultList().size();
+    public List<BuildingEntity> getAllBuildings(Pageable pageable) {
+        StringBuilder sql = new StringBuilder(buildQueryFilter())
+                .append(" LIMIT ").append(pageable.getPageSize()).append("\n")
+                .append(" OFFSET ").append(pageable.getOffset());
+        System.out.println("Final query: " + sql.toString());
+        Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
+        return query.getResultList();
     }
+
     private String buildQueryFilter() {
         String sql = "SELECT * FROM building";
         return sql;
     }
-
-//    @Override
-//    public BuildingEntity addOrUpdateBuilding(BuildingDTO buildingDTO) {
-//        System.out.println("OK");
-//        return null;
-//    }
 
 }

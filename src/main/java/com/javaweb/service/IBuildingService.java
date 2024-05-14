@@ -16,10 +16,10 @@ import java.util.List;
 
 public interface IBuildingService {
     ResponseDTO listStaffs(Long buildingId);
-    List<BuildingSearchResponse> findAll(BuildingSearchRequest buildingSearchRequest, Pageable pageable);
+    List<BuildingSearchResponse> findAll(BuildingSearchRequest buildingSearchRequest);
+    List<BuildingSearchResponse> getAllBuilding(Pageable pageable);
     BuildingDTO findBuildingById(Long id);
     void addOrUpdateBuilding(BuildingDTO buildingDTO);
     void deleteBuildingById(List<Long> ids);
     void assignmentBuilding(AssignmentBuildingDTO assignmentBuildingDTO);
-    int countTotalItem();
 }

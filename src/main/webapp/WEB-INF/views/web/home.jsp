@@ -832,7 +832,7 @@
                                                        alt="logo-footer"></a>
                         <p class="desc-logo-footer mt-3">Với hơn 10 năm kinh nghiệm, SkyLand tự hào là sàn
                             mua
-                            bán, giao dịch và quảng cáo
+                            bán, giao dịch và Fg cáo
                             bất động sản hàng đầu tại Việt Nam</p>
                         <div class="item-footer mt-5">
                             <div class="row">

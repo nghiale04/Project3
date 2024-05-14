@@ -46,7 +46,17 @@ public class UserEntity extends BaseEntity {
         this.buildingEntities = buildingEntities;
     }
 
-//    @OneToMany(mappedBy =  "user", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.MERGE})
+    private List<CustomerEntity> customers = new ArrayList<>();
+
+    public List<CustomerEntity> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<CustomerEntity> customers) {
+        this.customers = customers;
+    }
+    //    @OneToMany(mappedBy =  "user", fetch = FetchType.LAZY)
 //    private List<AssignmentBuildingEntity>  assignmentBuildingEntities = new ArrayList<>();
 //
 //    public List<AssignmentBuildingEntity> getAssignmentBuildingEntities() {
